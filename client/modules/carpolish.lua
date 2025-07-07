@@ -44,7 +44,7 @@ AddEventHandler('Vehicles:Client:StartUp', function()
             if DIRT_MULT then
                 local diff = GetVehicleDirtLevel(veh) - LAST_DIRT_LEVEL
                 if DoesEntityExist(veh) and diff > 0 then
-                    local newDirtLevel = Utils:Round(LAST_DIRT_LEVEL += (diff / DIRT_MULT), 5)
+                    local newDirtLevel = Utils:Round(LAST_DIRT_LEVEL + (diff / DIRT_MULT), 5)
                     if newDirtLevel > 10.0 then
                         newDirtLevel = 10.0
                     end
