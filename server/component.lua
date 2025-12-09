@@ -850,7 +850,7 @@ POPTYPE_CACHE 9
 POPTYPE_TOOL 10 
 ]]
 
-AddEventHandler('entityCreated', function(entity)
+function GenerateLocalVehicleInfo(entity)
     if not DoesEntityExist(entity) or Vehicles == nil then 
         return
     end
@@ -865,27 +865,22 @@ AddEventHandler('entityCreated', function(entity)
 
             veh.state.VIN = Vehicles.Identification.VIN:GenerateLocal()
             veh.state.Owned = false
-            veh.state.Locked = false
             veh.state.Hotwired = false
             veh.state.HotwiredSuccess = false
             veh.state.PlayerDriven = false
             veh.state.Fuel = math.random(vehicleParked and 25 or 50, 100)
             veh.state.Mileage = math.random(900, 10000)
-
-            local lockedChance = 45 -- %
-            if vehicleParked then
-                lockedChance = 65
-            end
-
-            if math.random(0, 100) <= lockedChance then
-                veh.state.Locked = true
-                SetVehicleDoorsLocked(entity, 2)
-            else
-                veh.state.Locked = false
-                SetVehicleDoorsLocked(entity, 1)
-            end
         end
     end
+end
+
+AddEventHandler("Vehicles:Server:GenerateVehicleInfo", GenerateLocalVehicleInfo)
+
+-- Generate Vehicle Info on Client Request
+RegisterNetEvent("Vehicles:Server:RequestGenerateVehicleInfo", function(vNet)
+    local src = source
+    local veh = NetworkGetEntityFromNetworkId(vNet)
+    GenerateLocalVehicleInfo(veh)
 end)
 
 function ApplyOldVehicleState(veh, fuel, damage, damagedParts, mileage, engineHealth, bodyHealth, isBlownUp, localProperties)
