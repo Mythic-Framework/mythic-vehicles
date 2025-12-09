@@ -87,7 +87,7 @@ function RegisterCallbacks()
         local property = Properties:Get(storageId)
         local maxParking = Properties:GetMaxParkingSpaces(storageId)
 
-        if property and maxParking and maxParking > 0 then
+        if property and property.id and Properties.Keys:Has(property.id, character:GetData("ID")) and maxParking and maxParking > 0 then
             local characterId = character:GetData('SID')
             Vehicles.Owned:GetAll(0, false, false, function(vehicles)
                 local c = {}
