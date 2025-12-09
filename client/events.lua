@@ -1,3 +1,5 @@
+local enteringVehicle = false
+
 AddEventHandler('Vehicles:Client:CharacterLogin', function()
     CreateThread(function() -- Vehicle Events Thread
         while _characterLoaded do
@@ -36,13 +38,49 @@ AddEventHandler('Vehicles:Client:CharacterLogin', function()
             if not VEHICLE_INSIDE then 
                 local enter = GetVehiclePedIsTryingToEnter(GLOBAL_PED)
                 if enter ~= 0 and DoesEntityExist(enter) then
-                    SetEntityAsMissionEntity(enter, true, true)
-                    local vehEnt = Entity(enter)
-                    if vehEnt.state.VEH_IGNITION == nil and NetworkGetEntityIsNetworked(enter) then
-                        Vehicles.Engine:Force(enter, GetIsVehicleEngineRunning(enter))
-                    end
+                    if not enteringVehicle or enteringVehicle ~= enter then
+                        enteringVehicle = enter
 
-                    SetVehicleNeedsToBeHotwired(enter, false)
+                        local populationType = GetEntityPopulationType(enter)
+                        if populationType == 2 or populationType == 3 or populationType == 5 then
+                            local vehEnt = Entity(enter)
+                            if vehEnt.state.VIN == nil then
+                                TriggerServerEvent("Vehicles:Server:RequestGenerateVehicleInfo", VehToNet(enter))
+                            end
+
+                            if vehEnt and vehEnt.state.Locked == nil then -- Hasn't Been Set Yet
+                                local lockedChance = 45 -- %
+                                if populationType == 2 then
+                                    lockedChance = 65
+                                end
+                    
+                                if math.random(0, 100) <= lockedChance then
+                                    vehEnt.state:set("Locked", true, true)
+                                    SetVehicleDoorsLocked(enter, 2)
+                                else
+                                    vehEnt.state:set("Locked", false, true)
+                                    SetVehicleDoorsLocked(enter, 1)
+                                end
+                            else
+                                if vehEnt.state.Locked then
+                                    SetVehicleDoorsLocked(enter, 2)
+                                else
+                                    SetVehicleDoorsLocked(enter, 1)
+                                end
+                            end
+                        end
+
+                        SetEntityAsMissionEntity(enter, true, true)
+                        local vehEnt = Entity(enter)
+
+                        if vehEnt.state.VEH_IGNITION == nil and NetworkGetEntityIsNetworked(enter) then
+                            Vehicles.Engine:Force(enter, GetIsVehicleEngineRunning(enter))
+                        end
+
+                        SetVehicleNeedsToBeHotwired(enter, false)
+                    end
+                elseif enteringVehicle then
+                    enteringVehicle = false
                 end
             end
     
