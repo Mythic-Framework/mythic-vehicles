@@ -96,9 +96,13 @@ AddEventHandler('Characters:Client:Spawn', function()
 	if _vehZone == nil then
 		return
 	end
-
+	
+	local entity = _vehZone.entity
 	_vehZone:destroy()
-	_vehZone = EntityZone:Create(_vehZone.entity, { scale = _pzScale, debugPoly = false })
+	
+	if entity and DoesEntityExist(entity) then
+		_vehZone = EntityZone:Create(entity, { scale = _pzScale, debugPoly = false })
+	end
 end)
 
 AddEventHandler('Characters:Client:Logout', CleanupZone)
