@@ -1,47 +1,24 @@
 local _checkingVehs = {}
 local _trackedCount = {}
 local _ghostedVehs = {}
+
 local _vehZone = nil
 local _pzScale = { 10.0, 5.0, 5.0 }
 local _isSpeeding = false
-local NetSync = nil
-
-AddEventHandler('Vehicles:Shared:DependencyUpdate', RetrieveComponents)
-function RetrieveComponents()
-    NetSync = exports['mythic-base']:FetchComponent('NetSync')
-end
-
-AddEventHandler('Core:Shared:Ready', function()
-    exports['mythic-base']:RequestDependencies('VehicleGhosting', {
-        'NetSync',
-    }, function(error)
-        if #error > 0 then return end
-        RetrieveComponents()
-    end)
-end)
 
 local function CleanupZone()
-    if _vehZone ~= nil then
-        _vehZone:destroy()
-        _vehZone = nil
-    end
-    _checkingVehs = {}
-    _trackedCount = {}
-    _ghostedVehs = {}
+	if _vehZone ~= nil then
+		_vehZone:destroy()
+		_vehZone = nil
+	end
 end
 
 local function DeleteGhostLocal(ent)
-    local vState = Entity(ent).state
-    if vState.Owned then
-        return
-    end
-    
-    if NetSync then
-        NetSync:DeleteEntity(ent)
-    else
-        SetEntityAsMissionEntity(ent, false, true)
-        DeleteEntity(ent)
-    end
+	local vState = Entity(ent).state
+	if vState.Owned then
+		return
+	end
+	NetSync:DeleteEntity(ent)
 end
 
 local function DoTheThing(veh)
@@ -116,19 +93,12 @@ local function DoTheThing(veh)
 end
 
 AddEventHandler('Characters:Client:Spawn', function()
-    if _vehZone == nil then
-        return
-    end
-    
-    local entity = _vehZone.entity
-    _vehZone:destroy()
-    
-    if entity and DoesEntityExist(entity) then
-        _vehZone = EntityZone:Create(entity, {
-            scale = _pzScale,
-            debugPoly = false
-        })
-    end
+	if _vehZone == nil then
+		return
+	end
+
+	_vehZone:destroy()
+	_vehZone = EntityZone:Create(_vehZone.entity, { scale = _pzScale, debugPoly = false })
 end)
 
 AddEventHandler('Characters:Client:Logout', CleanupZone)
@@ -136,53 +106,52 @@ AddEventHandler('Characters:Client:Logout', CleanupZone)
 AddEventHandler('Vehicles:Client:ExitVehicle', CleanupZone)
 
 AddEventHandler('Vehicles:Client:Speeding', function(isSpeeding)
-    _isSpeeding = isSpeeding
-    
-    if not _isSpeeding then
-        return
-    end
-    
-    _ghostedVehs = {}
-    
-    Citizen.CreateThread(function()
-        while _isSpeeding and _vehZone do
-            for k, v in pairs(_checkingVehs) do
-                if not v then
-                    goto continue
-                end
-                
-                local coord = GetEntityCoords(k)
-                local inside = _vehZone:isPointInside(coord)
-                
-                if inside and not _ghostedVehs[k] and (_trackedCount[k] or 0) <= 1 then
-                    local ped = GetPedInVehicleSeat(k, -1)
-                    if ped ~= 0 and not IsPedAPlayer(ped) then
-                        NetworkConcealEntity(k, true)
-                        _ghostedVehs[k] = true
-                        DeleteGhostLocal(k)
-                    end
-                elseif not inside and _ghostedVehs[k] then
-                    NetworkConcealEntity(k, false)
-                    _ghostedVehs[k] = false
-                end
-                ::continue::
-            end
-            Citizen.Wait(_isSpeeding and 0 or 50)
-        end
-        
-        for k, _ in pairs(_ghostedVehs) do -- this should bring them back, if not FUCK THEM!
-            if DoesEntityExist(k) then
-                NetworkConcealEntity(k, false)
-            end
-        end
-        _ghostedVehs = {}
-    end)
+	_isSpeeding = isSpeeding
+
+	if not _isSpeeding then
+		return
+	end
+
+	_ghostedVehs = {}
+
+	Citizen.CreateThread(function()
+		while _isSpeeding and _vehZone do
+			for k, v in pairs(_checkingVehs) do
+				if not v then
+					goto continue
+				end
+
+				local coord = GetEntityCoords(k)
+				local inside = _vehZone:isPointInside(coord)
+				if inside and not _ghostedVehs[k] and (_trackedCount[k] or 0) <= 1 then
+					local ped = GetPedInVehicleSeat(k, -1)
+					if ped ~= 0 and not IsPedAPlayer(ped) then
+						NetworkConcealEntity(k, true)
+						_ghostedVehs[k] = true
+						DeleteGhostLocal(k)
+					end
+				elseif not inside and _ghostedVehs[k] then
+					NetworkConcealEntity(k, false)
+					_ghostedVehs[k] = false
+				end
+				::continue::
+			end
+			Citizen.Wait(_isSpeeding and 0 or 50)
+		end
+
+		for k, _ in pairs(_ghostedVehs) do -- this should bring them back, if not FUCK THEM!
+			if DoesEntityExist(k) then
+				NetworkConcealEntity(k, false)
+			end
+		end
+		_ghostedVehs = {}
+	end)
 end)
 
 AddEventHandler('Vehicles:Client:BecameDriver', DoTheThing)
 
 AddEventHandler('Vehicles:Client:SwitchVehicleSeat', function(veh, seat)
-    if seat ~= -1 and _vehZone ~= nil then
-        CleanupZone()
-    end
+	if seat ~= -1 and _vehZone ~= nil then
+		CleanupZone()
+	end
 end)
