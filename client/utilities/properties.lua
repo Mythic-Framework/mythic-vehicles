@@ -113,6 +113,7 @@ function GetVehicleProperties(vehicle, initSetup)
                 trimB = GetVehicleMod(vehicle, 44),
                 tank = GetVehicleMod(vehicle, 45),
                 windows = GetVehicleMod(vehicle, 46),
+                lightbar = GetVehicleMod(vehicle, 49),
             }
         }
     else
