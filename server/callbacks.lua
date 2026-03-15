@@ -162,15 +162,23 @@ function RegisterCallbacks()
                     local onDuty = Player(source).state.onDuty
 
                     if onDuty and onDuty == vehicle.Owner.Id then
-                        local jobPermissions = Jobs.Permissions:GetPermissionsFromJob(source, vehicle.Owner.Id, vehicle.Owner.Workplace)
-                        if jobPermissions then
-                            local allowedLevel = GetAllowedFleetVehicleLevelFromJobPermissions(jobPermissions)
-                            if (allowedLevel >= vehicle.Owner.Level) then
-                                isAuthedForVehicle = true
-                            end
-                        end
-                    end
+local jobPermissions = Jobs.Permissions:GetPermissionsFromJob(source, vehicle.Owner.Id, vehicle.Owner.Workplace)
+if jobPermissions then
+    local allowedLevel = GetAllowedFleetVehicleLevelFromJobPermissions(jobPermissions)
+    if allowedLevel >= vehicle.Owner.Level then
+        local assigned = vehicle.GovAssigned
+        if assigned and #assigned > 0 then
+            for _, entry in ipairs(assigned) do
+                if entry.SID == characterId then
+                    isAuthedForVehicle = true
+                    break
                 end
+            end
+        else
+            isAuthedForVehicle = true
+        end
+    end
+end
 
                 if isAuthedForVehicle then
                     Vehicles.Owned:Spawn(source, vehicle.VIN, data.coords, data.heading, function(success, vehicleData, vehicleId)
