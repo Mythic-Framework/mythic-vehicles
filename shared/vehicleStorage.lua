@@ -1253,12 +1253,10 @@ _vehicleStorage = {
         name = 'MRPD Parking',
         vehType = 0,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'lspd' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = true },
-            { JobId = 'police', HQ = true },
-            { JobId = 'police', HQ = true },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'lspd', HQ = true },
         },
         coords = vector3(439.719, -989.149, 25.904),
         zone = {
@@ -1307,12 +1305,10 @@ _vehicleStorage = {
         name = 'MRPD Helipad',
         vehType = 2,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'lspd' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = true },
-            { JobId = 'police', HQ = true },
-            { JobId = 'police', HQ = true },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'lspd', HQ = true },
         },
         coords = vector3(450.41, -985.63, 43.69),
         zone = {
@@ -1333,12 +1329,10 @@ _vehicleStorage = {
         name = 'Paleto PD Parking',
         vehType = 0,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'lscso' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'lscso', HQ = false },
         },
         coords = vector3(-473.676, 6027.998, 31.341),
         zone = {
@@ -1375,12 +1369,10 @@ _vehicleStorage = {
         name = 'Paleto PD Helipad',
         vehType = 2,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'lscso' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'lscso', HQ = false },
         },
         coords = vector3(-483.913, 5979.515, 31.302),
         zone = {
@@ -1401,12 +1393,10 @@ _vehicleStorage = {
         name = 'Davis PD Parking',
         vehType = 0,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'lspd' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'lspd', HQ = false },
         },
         coords = vector3(392.790, -1620.695, 29.292),
         zone = {
@@ -1442,12 +1432,10 @@ _vehicleStorage = {
         name = 'La Mesa PD Parking',
         vehType = 0,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'lspd' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'lspd', HQ = false },
         },
         coords = vector3(834.850, -1346.309, 26.364),
         zone = {
@@ -1481,12 +1469,10 @@ _vehicleStorage = {
         name = 'Sandy PD Parking',
         vehType = 0,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'sasp' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'sasp', HQ = false },
         },
         coords = vector3(1849.456, 3697.478, 33.975),
         zone = {
@@ -1524,12 +1510,10 @@ _vehicleStorage = {
         name = 'Sandy PD Helipad',
         vehType = 2,
         restricted = { 
-            { JobId = 'police', WorkplaceId = false }, -- Allow All Police Workplaces
+            { JobId = 'police', WorkplaceId = 'sasp' },
         },
-        fleet = { -- HQ is where fleet vehicles originate from
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
-            { JobId = 'police', HQ = false },
+        fleet = {
+            { JobId = 'police', WorkplaceId = 'sasp', HQ = false },
         },
         coords = vector3(1853.725, 3705.902, 34.340),
         zone = {
