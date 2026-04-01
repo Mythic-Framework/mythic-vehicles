@@ -30,6 +30,7 @@ function RetrieveComponents()
     Tow = exports['mythic-base']:FetchComponent('Tow')
     Properties = exports['mythic-base']:FetchComponent('Properties')
     Banking = exports['mythic-base']:FetchComponent('Banking')
+    Version = exports['mythic-base']:FetchComponent('Version')
     RegisterChatCommands()
 end
 
@@ -56,6 +57,7 @@ AddEventHandler('Core:Shared:Ready', function()
         'Tow',
         'Properties',
         'Banking',
+        'Version',
     }, function(error)
         if #error > 0 then
             return
@@ -66,6 +68,7 @@ AddEventHandler('Core:Shared:Ready', function()
         RegisterItemUses()
         RegisterPersonalPlateCallbacks()
         Startup()
+        Version:Check('Mythic-Framework/Mythic-VersionCheckers', GetCurrentResourceName())
     end)
 end)
 
