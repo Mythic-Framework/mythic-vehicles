@@ -104,7 +104,7 @@ RegisterNetEvent('Vehicles:Server:PlayerSetProperties', function(veh, properties
                 vData:SetData('FirstSpawn', false)
                 VEHICLES_PENDING_PROPERTIES[veh] = nil
                 SaveVehicle(vState.VIN)
-            elseif vState.PleaseDoNotFuckingDelete then
+            elseif vState.PreventDespawn then
                 _savedVehiclePropertiesClusterfuck[vState.VIN] = properties
                 VEHICLES_PENDING_PROPERTIES[veh] = nil
             end
@@ -834,7 +834,7 @@ VEHICLE = {
                 VEHICLES_PENDING_PROPERTIES[vehicle] = true
 
                 ent.state.ServerEntity = vehicle
-                ent.state.PleaseDoNotFuckingDelete = true
+                ent.state.PreventDespawn = true
                 ent.state.awaitingProperties = {
                     needInit = true,
                 }
@@ -908,7 +908,7 @@ function ApplyOldVehicleState(veh, fuel, damage, damagedParts, mileage, engineHe
         ent.state.awaitingBlownUp = isBlownUp
 
         if localProperties then
-            ent.state.PleaseDoNotFuckingDelete = true
+            ent.state.PreventDespawn = true
             ent.state.awaitingProperties = {
                 needInit = false,
                 properties = localProperties,
@@ -929,8 +929,8 @@ end)
 AddEventHandler('entityRemoved', function(entity)
     if GetEntityType(entity) == 2 then
         local ent = Entity(entity)
-        if ent?.state?.VIN and (ent.state.Owned or ent.state.PleaseDoNotFuckingDelete) and not ent.state.Deleted then
-            local isLocal = ent.state.PleaseDoNotFuckingDelete
+        if ent?.state?.VIN and (ent.state.Owned or ent.state.PreventDespawn) and not ent.state.Deleted then
+            local isLocal = ent.state.PreventDespawn
 
             local vehModel = GetEntityModel(entity)
             local vehPlate = GetVehicleNumberPlateText(entity)

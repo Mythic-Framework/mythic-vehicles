@@ -34,7 +34,6 @@ function DoVehicleLockShit(veh)
     SetVehicleLights(veh, 0)
 end
 
--- Because the normal one doesn't fucking work
 function GetClosestVehicleWithinRadius(coords, radius)
     if not radius then
         radius = 5.0

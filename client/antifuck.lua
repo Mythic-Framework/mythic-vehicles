@@ -47,7 +47,7 @@ local function DoTheThing(veh)
         end
     end)
     
-    -- thread to track. I was stupid high and this may not work, fuck it, we ball
+    -- Track queuedvehicles and maintain ghost/unghost state.
     Citizen.CreateThread(function()
         local prevCoords = {}
         while _vehZone do
@@ -89,7 +89,7 @@ local function DoTheThing(veh)
             end
             Citizen.Wait(500)
         end
-    end) -- this whole thread can eat my dick from the back and finger my ass
+    end)
 end
 
 AddEventHandler('Characters:Client:Spawn', function()
@@ -143,7 +143,7 @@ AddEventHandler('Vehicles:Client:Speeding', function(isSpeeding)
 			Citizen.Wait(_isSpeeding and 0 or 50)
 		end
 
-		for k, _ in pairs(_ghostedVehs) do -- this should bring them back, if not FUCK THEM!
+		for k, _ in pairs(_ghostedVehs) do -- Restore any vehicles that were concealed during speeding once the loop ends
 			if DoesEntityExist(k) then
 				NetworkConcealEntity(k, false)
 			end

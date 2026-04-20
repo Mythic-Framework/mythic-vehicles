@@ -520,7 +520,7 @@ function RegisterCallbacks()
                     vehicleData:SetData('DirtLevel', 0.0)
                     Vehicles.Owned:ForceSave(vehicleData:GetData('VIN'))
 
-                elseif vehState.state.PleaseDoNotFuckingDelete then
+                elseif vehState.state.PreventDespawn then
                     _savedVehiclePropertiesClusterfuck[vehState.state.VIN] = data.new
                 end
     

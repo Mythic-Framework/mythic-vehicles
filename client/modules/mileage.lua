@@ -13,7 +13,7 @@ AddEventHandler('Vehicles:Client:StartUp', function()
 
             local vehCoords = GetEntityCoords(DAMAGE_VEHICLE)
             local distCovered = #(vehCoords - LAST_VEH_POS)
-            if distCovered >= 0.5 then -- Otherwise the vehicle isn't actually moving cunt
+            if distCovered >= 0.5 then -- Ignore tiny movement so mileage only updates while the vehicle is actually moving
                 local distCoveredMiles = distCovered / 1609
                 local newMileage = Utils:Round(currentMileage + distCoveredMiles, 2)
 
